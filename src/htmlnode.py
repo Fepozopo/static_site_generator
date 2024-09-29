@@ -20,9 +20,10 @@ class HTMLNode:
     
 
 class LeafNode(HTMLNode):
-    def __init__(self, tag, value, props):
+    def __init__(self, tag, value, props=None):
         super().__init__(tag, value, None, props)
 
+    # Render a leaf node as an HTML string
     def to_html(self):
         if self.value is None:
             raise ValueError("The value of a leaf node cannot be None")
@@ -32,3 +33,30 @@ class LeafNode(HTMLNode):
             return f"<{self.tag}>{self.value}</{self.tag}>"
         else: 
             return f"<{self.tag} {self.props_to_html()}>{self.value}</{self.tag}>"
+
+        
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        # Call the parent constructor with the tag, no value (since it's a parent), and children
+        super().__init__(tag, None, children, props)
+
+    # Return a string that represents the HTML tag of the node and its children
+    def to_html(self):
+        if self.tag is None:
+            raise ValueError("The tag of a parent node cannot be None")
+        if self.children is None or len(self.children) == 0:
+            raise ValueError("The children of a parent node cannot be None or empty")
+
+        # Start the opening tag
+        if self.props is None:
+            result = f"<{self.tag}>"
+        else:
+            result = f"<{self.tag} {self.props_to_html()}>"
+
+        # Iterate through the children and call their to_html() methods
+        for child in self.children:
+            result += child.to_html()
+
+        # Add the closing tag
+        result += f"</{self.tag}>"
+        return result
