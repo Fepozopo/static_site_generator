@@ -106,39 +106,39 @@ class TestParentNode(unittest.TestCase):
             assert str(e) == "The children of a parent node cannot be None or empty"
 
 
-class Test_text_note_to_html_node(unittest.TestCase):
+class TestTextNodeToHTMLNode(unittest.TestCase):
 # Create some tests for the text_node_to_html_node function
-    def test_text_note_to_html_node_with_text(self):
+    def test_text_node_to_html_node_with_text(self):
         # Test text_node_to_html_node with TextNode and text_type = "text"
         node = TextNode("This is a text node", "text")
         assert text_node_to_html_node(node) == LeafNode(None, "This is a text node", None)
 
-    def test_text_note_to_html_node_with_bold(self):
+    def test_text_node_to_html_node_with_bold(self):
         # Test text_node_to_html_node with TextNode and text_type = "bold"
         node = TextNode("This is a text node", "bold")
         assert text_node_to_html_node(node) == LeafNode("b", "This is a text node", None)
 
-    def test_text_note_to_html_node_with_italic(self):
+    def test_text_node_to_html_node_with_italic(self):
         # Test text_node_to_html_node with TextNode and text_type = "italic"
         node = TextNode("This is a text node", "italic")
         assert text_node_to_html_node(node) == LeafNode("i", "This is a text node", None)
 
-    def test_text_note_to_html_node_with_code(self):
+    def test_text_node_to_html_node_with_code(self):
         # Test text_node_to_html_node with TextNode and text_type = "code"
         node = TextNode("This is a text node", "code")
         assert text_node_to_html_node(node) == LeafNode("code", "This is a text node", None)
 
-    def test_text_note_to_html_node_with_link(self):
+    def test_text_node_to_html_node_with_link(self):
         # Test text_node_to_html_node with TextNode and text_type = "link"
         node = TextNode("This is a text node", "link", "https://www.boot.dev")
         assert text_node_to_html_node(node) == LeafNode("a", "This is a text node", {"href": "https://www.boot.dev"})
 
-    def test_text_note_to_html_node_with_image(self):
+    def test_text_node_to_html_node_with_image(self):
         # Test text_node_to_html_node with TextNode and text_type = "image"
         node = TextNode("This is a text node", "image", "https://www.boot.dev")
         assert text_node_to_html_node(node) == LeafNode("img", "", {"src": "https://www.boot.dev", "alt": "This is a text node"})
 
-    def test_text_note_to_html_node_with_invalid_text_type(self):
+    def test_text_node_to_html_node_with_invalid_text_type(self):
         # Test ValueError when text_type is invalid
         node = TextNode("This is a text node", "invalid")
         try:

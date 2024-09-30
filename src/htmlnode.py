@@ -1,7 +1,3 @@
-from textnode import TextNode
-
-
-
 class HTMLNode:
     def __init__(self, tag=None, value=None, children=None, props=None):
         self.tag = tag # A string representing the HTML tag name (e.g. "p", "a", "h1", etc.)
