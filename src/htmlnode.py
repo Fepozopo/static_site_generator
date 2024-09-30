@@ -1,3 +1,7 @@
+from textnode import TextNode
+
+
+
 class HTMLNode:
     def __init__(self, tag=None, value=None, children=None, props=None):
         self.tag = tag # A string representing the HTML tag name (e.g. "p", "a", "h1", etc.)
@@ -17,6 +21,15 @@ class HTMLNode:
     # Return an HTMLNode object that represents the children of the node
     def __repr__(self):
         return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
+    
+    # Compare attributes of two HTMLNode objects instead of memory addresses
+    def __eq__(self, other):
+        if not isinstance(other, HTMLNode):
+            return False
+        return (self.tag == other.tag and
+                self.value == other.value and
+                self.children == other.children and
+                self.props == other.props)
     
 
 class LeafNode(HTMLNode):
@@ -60,3 +73,22 @@ class ParentNode(HTMLNode):
         # Add the closing tag
         result += f"</{self.tag}>"
         return result
+    
+
+def text_node_to_html_node(text_node):
+    match text_node.text_type:
+        case "text":
+            return LeafNode(None, text_node.text, None)
+        case "bold":
+            return LeafNode("b", text_node.text, None)
+        case "italic":
+            return LeafNode("i", text_node.text, None)
+        case "code":
+            return LeafNode("code", text_node.text, None)
+        case "link":
+            return LeafNode("a", text_node.text, {"href": text_node.url})
+        case "image":
+            return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
+        case _:
+            raise ValueError(f"Invalid text type: {text_node.text_type}")
+        
