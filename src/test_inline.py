@@ -1,5 +1,5 @@
 import unittest
-from inline import split_nodes_delimiter, extract_markdown_images, extract_markdown_links
+from inline import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link
 from textnode import TextNode
 
 
@@ -107,3 +107,76 @@ class TestExtractMarkdownLinks(unittest.TestCase):
         text = "This is text with no links"
         result = extract_markdown_links(text)
         assert result == []
+
+
+class TestSplitNodesImage(unittest.TestCase):
+    def test_split_nodes_image(self):
+        text_type_text = "text"
+        text_type_image = "image"
+
+        node = TextNode("This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) image", text_type_text)
+        result = split_nodes_image([node])
+        assert result == [
+            TextNode("This is text with a ", text_type_text),
+            TextNode("rick roll", text_type_image, "https://i.imgur.com/aKaOqIh.gif"),
+            TextNode(" image", text_type_text),
+        ]
+
+    def test_split_nodes_image_with_no_images(self):
+        text_type_text = "text"
+
+        node = TextNode("This is text with no images", text_type_text)
+        result = split_nodes_image([node])
+        assert result == [node]
+
+    def test_split_nodes_image_with_mixed_nodes(self):
+        text_type_text = "text"
+        text_type_image = "image"
+
+        node1 = TextNode("Normal text", text_type_text)
+        node2 = TextNode("![](https://i.imgur.com/aKaOqIh.gif)", text_type_text)
+        node3 = TextNode("Code `inline` text", text_type_text)
+        result = split_nodes_image([node1, node2, node3])
+        assert result == [
+            node1,
+            TextNode("", text_type_image, "https://i.imgur.com/aKaOqIh.gif"),
+            node3,
+        ]
+
+
+class TestSplitNodesLink(unittest.TestCase):
+    def test_split_nodes_link(self):
+        text_type_text = "text"
+        text_type_link = "link"
+
+        node = TextNode("This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)", text_type_text)
+        result = split_nodes_link([node])
+        assert result == [
+                TextNode("This is text with a link ", text_type_text),
+                TextNode("to boot dev", text_type_link, "https://www.boot.dev"),
+                TextNode(" and ", text_type_text),
+                TextNode(
+                    "to youtube", text_type_link, "https://www.youtube.com/@bootdotdev"
+                ),
+            ]
+
+    def test_split_nodes_link_with_no_links(self):
+        text_type_text = "text"
+
+        node = TextNode("This is text with no links", text_type_text)
+        result = split_nodes_link([node])
+        assert result == [node]
+
+    def test_split_nodes_link_with_mixed_nodes(self):
+        text_type_text = "text"
+        text_type_link = "link"
+
+        node1 = TextNode("Normal text", text_type_text)
+        node2 = TextNode("[to boot dev](https://www.boot.dev)", text_type_text)
+        node3 = TextNode("Code `inline` text", text_type_text)
+        result = split_nodes_link([node1, node2, node3])
+        assert result == [
+            node1,
+            TextNode("to boot dev", text_type_link, "https://www.boot.dev"),
+            node3,
+        ]
