@@ -1,5 +1,5 @@
 import unittest
-from inline import split_nodes_delimiter
+from inline import split_nodes_delimiter, extract_markdown_images, extract_markdown_links
 from textnode import TextNode
 
 
@@ -81,3 +81,29 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             TextNode("inline", text_type_code),
             TextNode(" text", text_type_text),
         ]
+
+
+
+class TestExtractMarkdownImages(unittest.TestCase):
+    def test_extract_markdown_images(self):
+        text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        result = extract_markdown_images(text)
+        assert result == [("rick roll", "https://i.imgur.com/aKaOqIh.gif"), ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")]
+
+    def test_extract_markdown_images_with_no_images(self):
+        text = "This is text with no images"
+        result = extract_markdown_images(text)
+        assert result == []
+
+    
+
+class TestExtractMarkdownLinks(unittest.TestCase):
+    def test_extract_markdown_links(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
+        result = extract_markdown_links(text)
+        assert result == [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")]
+
+    def test_extract_markdown_links_with_no_links(self):
+        text = "This is text with no links"
+        result = extract_markdown_links(text)
+        assert result == []
