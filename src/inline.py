@@ -136,3 +136,21 @@ def split_nodes_link(old_nodes):
                     new_nodes.append(TextNode(anchor_text, "link", link_url))
                     
     return new_nodes
+
+
+def text_to_textnodes(text):
+    '''
+    This function converts a raw string of markdown text into a list of TextNodes using other functions.
+    '''
+
+    # Create an initial TextNode for the entire text
+    nodes = [TextNode(text, "text")]
+
+    # Process the Markdown syntax for each type: images, links, code blocks, bold, and finally italic text in that order
+    nodes = split_nodes_image(nodes) # Process images
+    nodes = split_nodes_link(nodes) # Process links
+    nodes = split_nodes_delimiter(nodes, "`", "code") # Process code blocks
+    nodes = split_nodes_delimiter(nodes, "**", "bold") # Process bold text
+    nodes = split_nodes_delimiter(nodes, "*", "italic") # Process italic text
+
+    return nodes
