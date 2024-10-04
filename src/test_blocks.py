@@ -27,6 +27,25 @@ class TestMarkdownToBlocks(unittest.TestCase):
             "* This is the first list item in a list block\n* This is a list item\n* This is another list item"
         ]
 
+    def test_markdown_to_blocks_with_whitespace(self):
+        markdown = """
+            # This is a heading
+         
+            This is a paragraph of text. It has some **bold** and *italic* words inside of it.
+            
+            * This is the first list item in a list block
+            * This is a list item
+            * This is another list item
+        """
+
+        result = markdown_to_blocks(markdown)
+
+        assert result == [
+            "# This is a heading",
+            "This is a paragraph of text. It has some **bold** and *italic* words inside of it.",
+            "* This is the first list item in a list block\n* This is a list item\n* This is another list item"
+        ]
+
 
 class TestBlockToBlockType(unittest.TestCase):
     def test_block_to_block_type(self):
