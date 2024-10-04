@@ -1,6 +1,6 @@
 import re
-from htmlnode import *
-from inline import *
+from htmlnode import ParentNode, LeafNode, text_node_to_html_node
+from inline import text_to_textnodes
 
 
 

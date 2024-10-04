@@ -1,6 +1,6 @@
 import unittest
-from blocks import *
-from htmlnode import *
+from blocks import markdown_to_blocks, block_to_block_type, block_to_html_node, text_to_children, markdown_to_html_node
+from htmlnode import LeafNode, ParentNode
 
 
 
