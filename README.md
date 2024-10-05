@@ -12,7 +12,7 @@ A simple static site generator written in Python. This tool allows users to quic
    ```bash
    git clone https://github.com/Fepozopo/static_site_generator.git
 2. Run the main.sh script to generate the site:
-    '''bash
+    ```bash
     ./main.sh
 
 ## Usage
