@@ -1,4 +1,4 @@
-from website import copy_static_to_public, generate_page
+from website import copy_static_to_public, generate_pages_recursive
 
 
 
@@ -6,7 +6,7 @@ from website import copy_static_to_public, generate_page
 def main():
 
     copy_static_to_public()
-    generate_page("content/index.md", "template.html", "public/index.html")
+    generate_pages_recursive("content", "template.html", "public")
 
 
 
